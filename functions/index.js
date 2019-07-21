@@ -8,7 +8,7 @@ const { getStatus } = require('./handlers/status')
 const { getCategories, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
 const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
-const { signup, login, getUsers, uploadImage, addUserDetails } = require('./handlers/users')
+const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
 
 //boards routes
 app.get('/boards', getBoards)
@@ -42,7 +42,7 @@ app.get('/status', getStatus)
 app.post('/signup', signup)
 app.post('/login', login)
 app.post('/user/image', FBAuth, uploadImage)
-
+app.get('/user', FBAuth, getAuthenticatedUser);
 app.post('/user', FBAuth, addUserDetails)
 app.get('/users', getUsers) //TODO adjust user list in pulses
 

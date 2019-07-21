@@ -87,6 +87,24 @@ exports.login = (req, res) => {
     })
 }
 
+// Get own user details
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return res.json(userData);          
+      }
+    })    
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+
 //add user details
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body)
