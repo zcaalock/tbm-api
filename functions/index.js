@@ -4,10 +4,10 @@ const app = require('express')()
 const FBAuth = require('./util/fbAuth')
 
 const { getBoards, postBoard, deleteBoard, patchBoard } = require('./handlers/boards')
-const { getStatus } = require('./handlers/status')
 const { getCategories, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
 const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
+const { getLead, getStatus} = require('./handlers/settings')
 const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
 
 //boards routes
@@ -34,8 +34,10 @@ app.post('/detail', postDetail)
 app.delete('/detail/:id', deleteDetail)
 app.patch('/detail/:id', patchDetail)
 
-//other routes
+//settings routes
+app.get('/lead', getLead)
 app.get('/status', getStatus)
+
 
 
 //users routes
