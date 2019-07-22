@@ -7,7 +7,7 @@ const { getBoards, postBoard, deleteBoard, patchBoard } = require('./handlers/bo
 const { getCategories, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
 const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
-const { getLead, getStatus} = require('./handlers/settings')
+const { getLead, deleteLead, postLead, getStatus} = require('./handlers/settings')
 const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
 
 //boards routes
@@ -36,6 +36,10 @@ app.patch('/detail/:id', patchDetail)
 
 //settings routes
 app.get('/lead', getLead)
+app.post('/lead/:userId', postLead)
+app.delete('/lead/:id', deleteLead)
+
+
 app.get('/status', getStatus)
 
 
