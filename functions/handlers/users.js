@@ -14,7 +14,8 @@ exports.signup = (req, res) => {
       email: req.body.email,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
-      handle: req.body.handle
+      handle: req.body.handle,
+      userInitials: req.body.handle
     }
     //vlidation
     const { valid, errors } = validateSignupData(newUser)
@@ -43,6 +44,7 @@ exports.signup = (req, res) => {
         token = idToken
         const userCredentials = {
           handle: newUser.handle,
+          userInitials: newUser.handle,
           email: newUser.email,
           createdAt: new Date().toISOString(),
           imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${noImg}?alt=media`,
