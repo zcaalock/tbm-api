@@ -17,7 +17,8 @@ exports.getPulses = (req, res) => {
             categoryId: doc.data().categoryId,
             createdAt: doc.data().createdAt,
             editedAt: doc.data().editedAt,
-            userInitials: doc.data().userInitials, //TODO update with user handle
+            userInitials: doc.data().userInitials, //TODO remove this
+            userId: doc.data().userId,
             status: doc.data().status
           });
         })
@@ -94,7 +95,8 @@ exports.patchPulse = (req, res) => {
           pulse: {
             id: pulseData.id,
             title: valueCheck(updateDocument, pulseData,"title"),
-            userInitials: valueCheck(updateDocument, pulseData,"userInitials"), //TODO update with user handle
+            userInitials: valueCheck(updateDocument, pulseData,"userInitials"), //TODO remove this
+            userId: valueCheck(updateDocument, pulseData,"userId"),
             status: valueCheck(updateDocument, pulseData,"status"),
             categoryId: pulseData.categoryId,
             createdAt: pulseData.createdAt,

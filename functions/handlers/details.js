@@ -66,10 +66,10 @@ exports.patchDetail = (req, res) => {
       editedAt: new Date().toISOString()
     }
 
-    const detailDpcument = db.doc(`/details/${req.params.id}`)
+    const detailDocument = db.doc(`/details/${req.params.id}`)
     let detailData
 
-    detailDpcument
+    detailDocument
       .get()
       .then(doc => {
         if (doc.exists) {
@@ -81,10 +81,10 @@ exports.patchDetail = (req, res) => {
         }
       })
       .then(() => {
-        return detailDpcument.update(updateDocument)
+        return detailDocument.update(updateDocument)
       })
       .then(() => {
-        return detailDpcument.update(updateDate)
+        return detailDocument.update(updateDate)
       })      
       .then(() => {        
 
