@@ -35,7 +35,7 @@ exports.postCategory = (req, res) => {
     const newCategory = {
       title: req.body.title,
       boardId: req.body.boardId,
-      //userHandle: req.user.handle,
+      privateId: '',
       createdAt: new Date().toISOString()
     }
     db
