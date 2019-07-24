@@ -14,9 +14,9 @@ exports.getCategories = (req, res) => {
             id: doc.id,
             title: doc.data().title,
             boardId: doc.data().boardId,
-            //userHandle: doc.data().userHandle,
+            privateId: doc.data().privateId,
             createdAt: doc.data().createdAt,
-            editedAt: doc.data().editedAt
+            editedAt: doc.data().editedAt            
           });
         })
         return res.json(category)
@@ -45,7 +45,7 @@ exports.postCategory = (req, res) => {
         res.json({
           category: {
             title: newCategory.title,
-            //userHandle: newBoard.userHandle
+            privateId: '',
             id: doc.id,
             boardId: newCategory.boardId,
             createdAt: newCategory.createdAt
@@ -83,14 +83,14 @@ exports.patchCategory = (req, res) => {
     })
     .then(() => {
       res.json({
-        category: {
-          title: updateDocument.title,
-          //userHandle: 
-          id: categoryData.id, //this is wrong
-          boardId: categoryData.boardId,
-          createdAt: categoryData.createdAt,
-          editedAt: updateDocument.editedAt
-        },
+        // category: {
+        //   title: updateDocument.title,
+        //   //userHandle: 
+        //   id: categoryData.id, //this is wrong
+        //   boardId: categoryData.boardId,
+        //   createdAt: categoryData.createdAt,
+        //   editedAt: updateDocument.editedAt
+        // },
         message: `Category ${categoryData.id} edited successfuly`
       })
     })
@@ -99,6 +99,25 @@ exports.patchCategory = (req, res) => {
       console.error(err)
     })
 }
+
+exports.getCategory = (req, res) => {
+  let categoryData = {};
+  //const docId = {id: req.params.id}
+  db.doc(`/categories/${req.params.id}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        categoryData = doc.data()
+        categoryData.id = doc.id
+        
+        return res.json(categoryData);          
+      }
+    })    
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 
 exports.deleteCategory = (req, res) => {
   const document = db.doc(`/categories/${req.params.id}`)

@@ -4,7 +4,7 @@ const app = require('express')()
 const FBAuth = require('./util/fbAuth')
 
 const { getBoards, postBoard, deleteBoard, patchBoard } = require('./handlers/boards')
-const { getCategories, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
+const { getCategories, getCategory, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
 const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
 const { getLead, deleteLead, postLead, patchLead, getStatus} = require('./handlers/settings')
@@ -18,6 +18,7 @@ app.patch('/board/:id', patchBoard)
 
 //categories routes
 app.get('/categories', getCategories)
+app.get('/category/:id', getCategory)
 app.post('/category', postCategory)
 app.delete('/category/:id', deleteCategory)
 app.patch('/category/:id', patchCategory)
