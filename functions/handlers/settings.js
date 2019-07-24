@@ -1,4 +1,5 @@
 const { db } = require('../util/admin')
+const { valueCheck } = require('../util/validators')
 
 exports.getLead = (req, res) => {
   db
@@ -45,6 +46,50 @@ exports.postLead = (req, res) => {
         console.error(err)
       })
   
+}
+
+exports.patchLead = (req, res) => {  
+    const updateDocument = req.body
+    const updateDate = {
+      editedAt: new Date().toISOString()
+    }
+
+    const leadDoacument = db.doc(`/lead/${req.params.id}`)
+    let leadData
+
+    leadDoacument
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          leadData = doc.data()
+          leadData.id = doc.id
+          return updateDocument
+        } else {
+          return res.status(404).json({ error: 'Lead not found' })
+        }
+      })
+      .then(() => {
+        return leadDoacument.update(updateDocument)
+      })
+      .then(() => {
+        return leadDoacument.update(updateDate)
+      })      
+      .then(() => {        
+
+        res.json({
+          lead: {
+            id: leadData.id,
+            title: valueCheck(updateDocument, leadData,"title"),            
+            userId: leadData.userId,            
+            editedAt: valueCheck(updateDocument, leadData,"editedAt")
+          },
+          message: `Lead ${leadData.id} edited successfuly`
+        })
+      })
+      .catch(err => {
+        res.status(500).json({ error: 'something went wrong' })
+        console.error(err)
+      })  
 }
 
 exports.deleteLead = (req, res) => {
