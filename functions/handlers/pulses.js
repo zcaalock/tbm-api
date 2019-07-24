@@ -17,9 +17,10 @@ exports.getPulses = (req, res) => {
             categoryId: doc.data().categoryId,
             createdAt: doc.data().createdAt,
             editedAt: doc.data().editedAt,
-            userInitials: doc.data().userInitials, //TODO remove this
+            userInitials: doc.data().userInitials, 
             userId: doc.data().userId,
-            status: doc.data().status
+            status: doc.data().status,
+            archived: doc.data().archived
           });
         })
         return res.json(pulse)
@@ -33,9 +34,10 @@ exports.postPulse = (req, res) => {
 
     const newPulse = {
       title: req.body.title,
-      userInitials: req.body.userInitials, //TODO update with user handle
+      userId: '',
       status: req.body.status,
       categoryId: req.body.categoryId,
+      archived: false,
       createdAt: new Date().toISOString()
     }
     db
@@ -46,8 +48,9 @@ exports.postPulse = (req, res) => {
           pulse: {
             id: doc.id,
             title: newPulse.title,
-            userInitials: newPulse.userInitials, //TODO update with user handle
+            userId: newPulse.userId, 
             status: newPulse.status,
+            archived: newPulse.archived,
             categoryId: newPulse.categoryId,
             createdAt: newPulse.createdAt
           },
@@ -94,13 +97,13 @@ exports.patchPulse = (req, res) => {
         res.json({
           pulse: {
             id: pulseData.id,
-            title: valueCheck(updateDocument, pulseData,"title"),
-            userInitials: valueCheck(updateDocument, pulseData,"userInitials"), //TODO remove this
+            title: valueCheck(updateDocument, pulseData,"title"),            
             userId: valueCheck(updateDocument, pulseData,"userId"),
             status: valueCheck(updateDocument, pulseData,"status"),
             categoryId: pulseData.categoryId,
             createdAt: pulseData.createdAt,
-            editedAt: valueCheck(updateDocument, pulseData,"editedAt")
+            editedAt: valueCheck(updateDocument, pulseData,"editedAt"),
+            archived: valueCheck(updateDocument, pulseData,"archived")
           },
           message: `Pulse ${pulseData.id} edited successfuly`
         })
