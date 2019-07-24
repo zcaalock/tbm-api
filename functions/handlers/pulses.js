@@ -37,7 +37,7 @@ exports.postPulse = (req, res) => {
       userId: '',
       status: req.body.status,
       categoryId: req.body.categoryId,
-      archived: false,
+      archived: 'false',
       createdAt: new Date().toISOString()
     }
     db

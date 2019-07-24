@@ -32,7 +32,7 @@ exports.postDetail = (req, res) => {
 
     const newDetail = {
       title: req.body.title,      
-      check: false,
+      check: 'false',
       pulseId: req.body.pulseId,
       createdAt: new Date().toISOString()
     }
