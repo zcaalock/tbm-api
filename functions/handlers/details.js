@@ -1,110 +1,103 @@
-const cors = require('cors')({ origin: true });
-const {db} = require('../util/admin')
+const { db } = require('../util/admin')
 const { valueCheck } = require('../util/validators')
 
 exports.getDetails = (req, res) => {
-  cors(req, res, () => {
-    db
-      .collection('details')
-      .orderBy('createdAt')
-      .get()
-      .then(data => {
-        let detail = [];
-        data.forEach((doc) => {
-          detail.push({
-            id: doc.id,
-            title: doc.data().title,
-            check: doc.data().check,
-            pulseId: doc.data().pulseId,
-            //userHandle: doc.data().userHandle,
-            createdAt: doc.data().createdAt,
-            editedAt: doc.data().editedAt
-          });
-        })
-        return res.json(detail)
+  db
+    .collection('details')
+    .orderBy('createdAt')
+    .get()
+    .then(data => {
+      let detail = [];
+      data.forEach((doc) => {
+        detail.push({
+          id: doc.id,
+          title: doc.data().title,
+          check: doc.data().check,
+          pulseId: doc.data().pulseId,
+          //userHandle: doc.data().userHandle,
+          createdAt: doc.data().createdAt,
+          editedAt: doc.data().editedAt
+        });
       })
-      .catch(err => console.error(err))
-  })
+      return res.json(detail)
+    })
+    .catch(err => console.error(err))
 }
 
 exports.postDetail = (req, res) => {
-  cors(req, res, () => {
 
-    const newDetail = {
-      title: req.body.title,      
-      check: 'false',
-      pulseId: req.body.pulseId,
-      createdAt: new Date().toISOString()
-    }
-    db
-      .collection('details')
-      .add(newDetail)
-      .then(doc => {
-        res.json({
-          detail: {
-            id: doc.id,
-            title: newDetail.title,            
-            check: newDetail.check,
-            pulseId: newDetail.pulseId,
-            createdAt: newDetail.createdAt
-          },
-          message: `Detail ${doc.id} created successfuly`
-        })
+  const newDetail = {
+    title: req.body.title,
+    check: 'false',
+    pulseId: req.body.pulseId,
+    createdAt: new Date().toISOString()
+  }
+  db
+    .collection('details')
+    .add(newDetail)
+    .then(doc => {
+      res.json({
+        detail: {
+          id: doc.id,
+          title: newDetail.title,
+          check: newDetail.check,
+          pulseId: newDetail.pulseId,
+          createdAt: newDetail.createdAt
+        },
+        message: `Detail ${doc.id} created successfuly`
       })
-      .catch(err => {
-        res.status(500).json({ error: 'something went wrong' })
-        console.error(err)
-      })
-  })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
 }
 
 exports.patchDetail = (req, res) => {
-  cors(req, res, () => {
-    const updateDocument = req.body
-    const updateDate = {
+  const updateDocument = req.body
+  const updateDate = {
 
-      editedAt: new Date().toISOString()
-    }
+    editedAt: new Date().toISOString()
+  }
 
-    const detailDocument = db.doc(`/details/${req.params.id}`)
-    let detailData
+  const detailDocument = db.doc(`/details/${req.params.id}`)
+  let detailData
 
-    detailDocument
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          detailData = doc.data()
-          detailData.id = doc.id
-          return updateDocument
-        } else {
-          return res.status(404).json({ error: 'Detail not found' })
-        }
-      })
-      .then(() => {
-        return detailDocument.update(updateDocument)
-      })
-      .then(() => {
-        return detailDocument.update(updateDate)
-      })      
-      .then(() => {        
+  detailDocument
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        detailData = doc.data()
+        detailData.id = doc.id
+        return updateDocument
+      } else {
+        return res.status(404).json({ error: 'Detail not found' })
+      }
+    })
+    .then(() => {
+      return detailDocument.update(updateDocument)
+    })
+    .then(() => {
+      return detailDocument.update(updateDate)
+    })
+    .then(() => {
 
-        res.json({
-          detail: {
-            id: detailData.id,
-            title: valueCheck(updateDocument, detailData,"title"),            
-            check: valueCheck(updateDocument, detailData,"check"),
-            pulseId: detailData.pulseId,
-            createdAt: detailData.createdAt,
-            editedAt: valueCheck(updateDocument, detailData,"editedAt")
-          },
-          message: `Detail ${detailData.id} edited successfuly`
-        })
+      res.json({
+        detail: {
+          id: detailData.id,
+          title: valueCheck(updateDocument, detailData, "title"),
+          check: valueCheck(updateDocument, detailData, "check"),
+          pulseId: detailData.pulseId,
+          createdAt: detailData.createdAt,
+          editedAt: valueCheck(updateDocument, detailData, "editedAt")
+        },
+        message: `Detail ${detailData.id} edited successfuly`
       })
-      .catch(err => {
-        res.status(500).json({ error: 'something went wrong' })
-        console.error(err)
-      })
-  })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
 }
 
 exports.deleteDetail = (req, res) => {

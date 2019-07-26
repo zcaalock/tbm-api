@@ -1,62 +1,57 @@
-const cors = require('cors')({ origin: true });
 const { db } = require('../util/admin')
 
 exports.getBoards = (req, res) => {
-  cors(req, res, () => {
-    db
-      .collection('boards')
-      .orderBy('createdAt')
-      .get()
-      .then(data => {
-        let boards = [];
-        data.forEach((doc) => {
-          boards.push({
-            id: doc.id,
-            title: doc.data().title,
+  db
+    .collection('boards')
+    .orderBy('createdAt')
+    .get()
+    .then(data => {
+      let boards = [];
+      data.forEach((doc) => {
+        boards.push({
+          id: doc.id,
+          title: doc.data().title,
 
-            //userHandle: doc.data().userHandle,
-            createdAt: doc.data().createdAt,
-            editedAt: doc.data().editedAt
-          });
-        })
-        return res.json(boards)
+          //userHandle: doc.data().userHandle,
+          createdAt: doc.data().createdAt,
+          editedAt: doc.data().editedAt
+        });
       })
-      .catch(err => console.error(err))
-  })
+      return res.json(boards)
+    })
+    .catch(err => console.error(err))
 }
 
 exports.postBoard = (req, res) => {
-  cors(req, res, () => {
 
-    if (req.body.title.trim() === '') {
-      return res.status(400).json({ body: 'field must not be empty' })
-    }
+  if (req.body.title.trim() === '') {
+    return res.status(400).json({ body: 'field must not be empty' })
+  }
 
-    const newBoard = {
-      title: req.body.title,
+  const newBoard = {
+    title: req.body.title,
 
-      //userHandle: req.user.handle,
-      createdAt: new Date().toISOString()
-    }
-    db
-      .collection('boards')
-      .add(newBoard)
-      .then(doc => {
-        res.json({
-          board: {
-            title: newBoard.title,
-            //userHandle: newBoard.userHandle
-            id: doc.id,
-            createdAt: newBoard.createdAt
-          },
-          message: `document ${doc.id} created successfuly`
-        })
+    //userHandle: req.user.handle,
+    createdAt: new Date().toISOString()
+  }
+  db
+    .collection('boards')
+    .add(newBoard)
+    .then(doc => {
+      res.json({
+        board: {
+          title: newBoard.title,
+          //userHandle: newBoard.userHandle
+          id: doc.id,
+          createdAt: newBoard.createdAt
+        },
+        message: `document ${doc.id} created successfuly`
       })
-      .catch(err => {
-        res.status(500).json({ error: 'something went wrong' })
-        console.error(err)
-      })
-  })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
 }
 
 exports.patchBoard = (req, res) => {
@@ -69,15 +64,15 @@ exports.patchBoard = (req, res) => {
 
   boardDocument.get()
     .then(doc => {
-      if(doc.exists){
+      if (doc.exists) {
         boardData = doc.data()
         boardData.id = doc.id
         return updateDocument
       } else {
-        return res.status(404).json({error: 'Board not found'})
+        return res.status(404).json({ error: 'Board not found' })
       }
     })
-    .then(()=>{
+    .then(() => {
       return boardDocument.update(updateDocument)
     })
     .then(() => {

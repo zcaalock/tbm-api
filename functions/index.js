@@ -3,6 +3,9 @@ const app = require('express')()
 
 const FBAuth = require('./util/fbAuth')
 
+const cors = require('cors')
+app.use(cors())
+
 const { getBoards, postBoard, deleteBoard, patchBoard } = require('./handlers/boards')
 const { getCategories, getCategory, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
 const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')

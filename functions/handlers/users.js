@@ -1,4 +1,3 @@
-const cors = require('cors')({ origin: true });
 const firebase = require('firebase')
 const { admin, db } = require('../util/admin')
 
@@ -9,57 +8,55 @@ firebase.initializeApp(firebaseConfig)
 const { validateSignupData, validateLoginData, reduceUserDetails } = require('../util/validators')
 
 exports.signup = (req, res) => {
-  cors(req, res, () => {
-    const newUser = {
-      email: req.body.email,
-      password: req.body.password,
-      confirmPassword: req.body.confirmPassword,
-      handle: req.body.handle      
-    }
-    //vlidation
-    const { valid, errors } = validateSignupData(newUser)
-    if (!valid) return res.status(400).json(errors)
+  const newUser = {
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+    handle: req.body.handle
+  }
+  //vlidation
+  const { valid, errors } = validateSignupData(newUser)
+  if (!valid) return res.status(400).json(errors)
 
-    //add image
-    const noImg = 'no-image.png'
+  //add image
+  const noImg = 'no-image.png'
 
-    // validate data
-    let token, userId
-    db.doc(`/users/${newUser.handle}`).get()
-      .then(doc => {
-        if (doc.exists) {
-          return res.status(400).json({ handle: 'this handle is already taken' })
-        } else {
-          return firebase
-            .auth()
-            .createUserWithEmailAndPassword(newUser.email, newUser.password)
-        }
-      })
-      .then((data) => {
-        userId = data.user.uid
-        return data.user.getIdToken()
-      })
-      .then((idToken) => {
-        token = idToken
-        const userCredentials = {
-          handle: newUser.handle,          
-          email: newUser.email,
-          createdAt: new Date().toISOString(),
-          imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${noImg}?alt=media`,
-          userId
-        }
-        return db.doc(`/users/${newUser.handle}`).set(userCredentials)
-      })
-      .then(() => {
-        return res.status(201).json({ token })
-      })
-      .catch(err => {
-        console.error(err)
-        if (err.code === 'auth/email-already-in-use') {
-          return res.status(400).json({ email: 'This email is already in use' })
-        } else { return res.status(500).json({ general: 'Something went wrong please try again' }) }
-      })
-  })
+  // validate data
+  let token, userId
+  db.doc(`/users/${newUser.handle}`).get()
+    .then(doc => {
+      if (doc.exists) {
+        return res.status(400).json({ handle: 'this handle is already taken' })
+      } else {
+        return firebase
+          .auth()
+          .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      }
+    })
+    .then((data) => {
+      userId = data.user.uid
+      return data.user.getIdToken()
+    })
+    .then((idToken) => {
+      token = idToken
+      const userCredentials = {
+        handle: newUser.handle,
+        email: newUser.email,
+        createdAt: new Date().toISOString(),
+        imageUrl: `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${noImg}?alt=media`,
+        userId
+      }
+      return db.doc(`/users/${newUser.handle}`).set(userCredentials)
+    })
+    .then(() => {
+      return res.status(201).json({ token })
+    })
+    .catch(err => {
+      console.error(err)
+      if (err.code === 'auth/email-already-in-use') {
+        return res.status(400).json({ email: 'This email is already in use' })
+      } else { return res.status(500).json({ general: 'Something went wrong please try again' }) }
+    })
 }
 
 exports.login = (req, res) => {
@@ -95,9 +92,9 @@ exports.getAuthenticatedUser = (req, res) => {
     .then((doc) => {
       if (doc.exists) {
         userData.credentials = doc.data();
-        return res.json(userData);          
+        return res.json(userData);
       }
-    })    
+    })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
@@ -169,20 +166,18 @@ exports.uploadImage = (req, res) => {
 
 
 exports.getUsers = (req, res) => {
-  cors(req, res, () => {
-    db
-      .collection('users')
-      .get()
-      .then(data => {
-        let users = [];
-        data.forEach((doc) => {
-          users.push({
-            id: doc.id,
-            title: doc.data().title,            
-          });
-        })
-        return res.json(users)
+  db
+    .collection('users')
+    .get()
+    .then(data => {
+      let users = [];
+      data.forEach((doc) => {
+        users.push({
+          id: doc.id,
+          title: doc.data().title,
+        });
       })
-      .catch(err => console.error(err))
-  })
+      return res.json(users)
+    })
+    .catch(err => console.error(err))
 }

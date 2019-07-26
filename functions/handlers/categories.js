@@ -1,63 +1,58 @@
-const cors = require('cors')({ origin: true });
 const { db } = require('../util/admin')
 
 exports.getCategories = (req, res) => {
-  cors(req, res, () => {
-    db
-      .collection('categories')
-      .orderBy('createdAt')
-      .get()
-      .then(data => {
-        let category = [];
-        data.forEach((doc) => {
-          category.push({
-            id: doc.id,
-            title: doc.data().title,
-            boardId: doc.data().boardId,
-            privateId: doc.data().privateId,
-            createdAt: doc.data().createdAt,
-            editedAt: doc.data().editedAt            
-          });
-        })
-        return res.json(category)
+  db
+    .collection('categories')
+    .orderBy('createdAt')
+    .get()
+    .then(data => {
+      let category = [];
+      data.forEach((doc) => {
+        category.push({
+          id: doc.id,
+          title: doc.data().title,
+          boardId: doc.data().boardId,
+          privateId: doc.data().privateId,
+          createdAt: doc.data().createdAt,
+          editedAt: doc.data().editedAt
+        });
       })
-      .catch(err => console.error(err))
-  })
+      return res.json(category)
+    })
+    .catch(err => console.error(err))
 }
 
 exports.postCategory = (req, res) => {
-  cors(req, res, () => {
 
-    if (req.body.title.trim() === '') {
-      return res.status(400).json({ body: 'field must not be empty' })
-    }
+  if (req.body.title.trim() === '') {
+    return res.status(400).json({ body: 'field must not be empty' })
+  }
 
-    const newCategory = {
-      title: req.body.title,
-      boardId: req.body.boardId,
-      privateId: '',
-      createdAt: new Date().toISOString()
-    }
-    db
-      .collection('categories')
-      .add(newCategory)
-      .then(doc => {
-        res.json({
-          category: {
-            title: newCategory.title,
-            privateId: '',
-            id: doc.id,
-            boardId: newCategory.boardId,
-            createdAt: newCategory.createdAt
-          },
-          message: `document ${doc.id} created successfuly`
-        })
+  const newCategory = {
+    title: req.body.title,
+    boardId: req.body.boardId,
+    privateId: '',
+    createdAt: new Date().toISOString()
+  }
+  db
+    .collection('categories')
+    .add(newCategory)
+    .then(doc => {
+      res.json({
+        category: {
+          title: newCategory.title,
+          privateId: '',
+          id: doc.id,
+          boardId: newCategory.boardId,
+          createdAt: newCategory.createdAt
+        },
+        message: `document ${doc.id} created successfuly`
       })
-      .catch(err => {
-        res.status(500).json({ error: 'something went wrong' })
-        console.error(err)
-      })
-  })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
 }
 
 exports.patchCategory = (req, res) => {
@@ -109,10 +104,10 @@ exports.getCategory = (req, res) => {
       if (doc.exists) {
         categoryData = doc.data()
         categoryData.id = doc.id
-        
-        return res.json(categoryData);          
+
+        return res.json(categoryData);
       }
-    })    
+    })
     .catch((err) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
