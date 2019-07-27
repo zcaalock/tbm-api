@@ -14,8 +14,7 @@ exports.getPulses = (req, res) => {
           title: doc.data().title,
           categoryId: doc.data().categoryId,
           createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt,
-          userInitials: doc.data().userInitials,
+          editedAt: doc.data().editedAt,          
           userId: doc.data().userId,
           status: doc.data().status,
           archived: doc.data().archived

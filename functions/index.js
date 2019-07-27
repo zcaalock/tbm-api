@@ -12,6 +12,7 @@ const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handler
 const { getPulses, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
 const { getLead, deleteLead, postLead, patchLead, getStatus} = require('./handlers/settings')
 const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
+const { getNotes, postNote, patchNote, deleteNote } = require('./handlers/notepad')
 
 //boards routes
 app.get('/boards', getBoards)
@@ -37,6 +38,12 @@ app.get('/details', getDetails)
 app.post('/detail', postDetail)
 app.delete('/detail/:id', deleteDetail)
 app.patch('/detail/:id', patchDetail)
+
+//notes routes
+app.get('/notepad', getNotes)
+app.post('/notepad', postNote)
+app.patch('/notepad/:id', patchNote)
+app.delete('/notepad/:id', deleteNote)
 
 //settings routes
 app.get('/lead', getLead)
