@@ -11,7 +11,7 @@ const isEmail = (email) => {
 
 //for update routes
 exports.valueCheck = (newDoc,oldDoc,value)=>{
-  if(newDoc[value] )
+  if(newDoc[value] || newDoc[value] === '' )
   return newDoc[value]
   else return oldDoc[value]
 }

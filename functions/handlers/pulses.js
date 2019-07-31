@@ -99,7 +99,7 @@ exports.patchPulse = (req, res) => {
           categoryId: pulseData.categoryId,
           createdAt: pulseData.createdAt,
           editedAt: valueCheck(updateDocument, pulseData, "editedAt"),
-          editedAt: valueCheck(updateDocument, deadline, "deadline"),
+          deadline: valueCheck(updateDocument, pulseData, "deadline"),
           archived: valueCheck(updateDocument, pulseData, "archived")
         },
         message: `Pulse ${pulseData.id} edited successfuly`
