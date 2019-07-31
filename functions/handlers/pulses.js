@@ -14,7 +14,8 @@ exports.getPulses = (req, res) => {
           title: doc.data().title,
           categoryId: doc.data().categoryId,
           createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt,          
+          editedAt: doc.data().editedAt,
+          deadline: doc.data().deadline,          
           userId: doc.data().userId,
           status: doc.data().status,
           archived: doc.data().archived
@@ -33,6 +34,7 @@ exports.postPulse = (req, res) => {
     status: req.body.status,
     categoryId: req.body.categoryId,
     archived: 'false',
+    deadline: '',
     createdAt: new Date().toISOString()
   }
   db
@@ -47,6 +49,7 @@ exports.postPulse = (req, res) => {
           status: newPulse.status,
           archived: newPulse.archived,
           categoryId: newPulse.categoryId,
+          deadline: newPulse.deadline,
           createdAt: newPulse.createdAt
         },
         message: `Pulse ${doc.id} created successfuly`
@@ -96,6 +99,7 @@ exports.patchPulse = (req, res) => {
           categoryId: pulseData.categoryId,
           createdAt: pulseData.createdAt,
           editedAt: valueCheck(updateDocument, pulseData, "editedAt"),
+          editedAt: valueCheck(updateDocument, deadline, "deadline"),
           archived: valueCheck(updateDocument, pulseData, "archived")
         },
         message: `Pulse ${pulseData.id} edited successfuly`
