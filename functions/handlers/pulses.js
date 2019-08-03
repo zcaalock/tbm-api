@@ -15,6 +15,7 @@ exports.getPulses = (req, res) => {
           categoryId: doc.data().categoryId,
           createdAt: doc.data().createdAt,
           editedAt: doc.data().editedAt,
+          privateId: doc.data().privateId,
           deadline: doc.data().deadline,          
           userId: doc.data().userId,
           status: doc.data().status,
@@ -33,6 +34,7 @@ exports.postPulse = (req, res) => {
     userId: req.body.userId,
     status: req.body.status,
     categoryId: req.body.categoryId,
+    privateId: req.body.privateId,
     archived: 'false',
     deadline: '',
     createdAt: new Date().toISOString()
@@ -49,6 +51,7 @@ exports.postPulse = (req, res) => {
           status: newPulse.status,
           archived: newPulse.archived,
           categoryId: newPulse.categoryId,
+          privateId: newPulse.privateId,
           deadline: newPulse.deadline,
           createdAt: newPulse.createdAt
         },
@@ -99,6 +102,7 @@ exports.patchPulse = (req, res) => {
           categoryId: pulseData.categoryId,
           createdAt: pulseData.createdAt,
           editedAt: valueCheck(updateDocument, pulseData, "editedAt"),
+          privateId: valueCheck(updateDocument, pulseData, "privateId"),
           deadline: valueCheck(updateDocument, pulseData, "deadline"),
           archived: valueCheck(updateDocument, pulseData, "archived")
         },
