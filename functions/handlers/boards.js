@@ -11,8 +11,7 @@ exports.getBoards = (req, res) => {
         boards.push({
           id: doc.id,
           title: doc.data().title,
-
-          //userHandle: doc.data().userHandle,
+          privateId: doc.data().privateId,
           createdAt: doc.data().createdAt,
           editedAt: doc.data().editedAt
         });
