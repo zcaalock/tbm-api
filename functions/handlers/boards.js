@@ -1,4 +1,5 @@
 const { db } = require('../util/admin')
+const { valueCheck } = require('../util/validators')
 
 exports.getBoards = (req, res) => {
   db
@@ -29,8 +30,7 @@ exports.postBoard = (req, res) => {
 
   const newBoard = {
     title: req.body.title,
-
-    //userHandle: req.user.handle,
+    privateId: req.body.privateId,
     createdAt: new Date().toISOString()
   }
   db
@@ -40,7 +40,7 @@ exports.postBoard = (req, res) => {
       res.json({
         board: {
           title: newBoard.title,
-          //userHandle: newBoard.userHandle
+          privateId: newBoard.privateId,
           id: doc.id,
           createdAt: newBoard.createdAt
         },
@@ -53,15 +53,57 @@ exports.postBoard = (req, res) => {
     })
 }
 
+// exports.patchBoard = (req, res) => {
+//   const updateDocument = {
+//     title: req.body.title,
+//     editedAt: new Date().toISOString()
+//   }
+//   const boardDocument = db.doc(`/boards/${req.params.id}`)
+//   let boardData
+
+//   boardDocument.get()
+//     .then(doc => {
+//       if (doc.exists) {
+//         boardData = doc.data()
+//         boardData.id = doc.id
+//         return updateDocument
+//       } else {
+//         return res.status(404).json({ error: 'Board not found' })
+//       }
+//     })
+//     .then(() => {
+//       return boardDocument.update(updateDocument)
+//     })
+//     .then(() => {
+//       res.json({
+//         board: {
+//           title: updateDocument.title,
+//           //userHandle: 
+//           id: req.params.id, //this is wrong
+//           createdAt: boardData.createdAt,
+//           editedAt: updateDocument.editedAt
+//         },
+//         message: `Board ${req.params.id} edited successfuly`
+//       })
+//     })
+//     .catch(err => {
+//       res.status(500).json({ error: 'something went wrong' })
+//       console.error(err)
+//     })
+// }
+
 exports.patchBoard = (req, res) => {
-  const updateDocument = {
-    title: req.body.title,
+  const updateDocument = req.body
+  const updateDate = {
+
     editedAt: new Date().toISOString()
   }
+
   const boardDocument = db.doc(`/boards/${req.params.id}`)
   let boardData
 
-  boardDocument.get()
+  boardDocument
+    .get()
     .then(doc => {
       if (doc.exists) {
         boardData = doc.data()
@@ -75,15 +117,19 @@ exports.patchBoard = (req, res) => {
       return boardDocument.update(updateDocument)
     })
     .then(() => {
+      return boardDocument.update(updateDate)
+    })
+    .then(() => {
+
       res.json({
         board: {
-          title: updateDocument.title,
-          //userHandle: 
-          id: req.params.id, //this is wrong
+          id: boardData.id,
+          title: valueCheck(updateDocument, boardData, "title"),
+          privateId: valueCheck(updateDocument, boardData, "privateId"),          
           createdAt: boardData.createdAt,
-          editedAt: updateDocument.editedAt
+          editedAt: valueCheck(updateDocument, boardData, "editedAt"),
         },
-        message: `Board ${req.params.id} edited successfuly`
+        message: `Pulse ${boardData.id} edited successfuly`
       })
     })
     .catch(err => {
