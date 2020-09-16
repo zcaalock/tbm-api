@@ -1,4 +1,5 @@
 const { db } = require('../util/admin')
+const { valueCheck } = require('../util/validators')
 
 exports.getCategories = (req, res) => {
   db
@@ -57,16 +58,18 @@ exports.postCategory = (req, res) => {
       console.error(err)
     })
 }
-
 exports.patchCategory = (req, res) => {
-  const updateDocument = {
-    title: req.body.title,
+  const updateDocument = req.body
+  const updateDate = {
+
     editedAt: new Date().toISOString()
-  }
+  }  
+      
   const categoryDocument = db.doc(`/categories/${req.params.id}`)
   let categoryData
 
-  categoryDocument.get()
+  categoryDocument
+    .get()
     .then(doc => {
       if (doc.exists) {
         categoryData = doc.data()
@@ -80,15 +83,18 @@ exports.patchCategory = (req, res) => {
       return categoryDocument.update(updateDocument)
     })
     .then(() => {
+      return categoryDocument.update(updateDate)
+    })
+    .then(() => {
       res.json({
-        // category: {
-        //   title: updateDocument.title,
-        //   //userHandle: 
-        //   id: categoryData.id, //this is wrong
-        //   boardId: categoryData.boardId,
-        //   createdAt: categoryData.createdAt,
-        //   editedAt: updateDocument.editedAt
-        // },
+        category: {
+          title: valueCheck(updateDocument, categoryData, "title"),
+          id: categoryData.id, 
+          boardId: categoryData.boardId,
+          createdAt: categoryData.createdAt,
+          editedAt: valueCheck(updateDocument, categoryData, "editedAt"),
+          archived: valueCheck(updateDocument, categoryData, "archived")          
+        },
         message: `Category ${categoryData.id} edited successfuly`
       })
     })

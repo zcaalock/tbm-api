@@ -92,7 +92,6 @@ exports.patchPulse = (req, res) => {
       return pulseDocument.update(updateDate)
     })
     .then(() => {
-
       res.json({
         pulse: {
           id: pulseData.id,
