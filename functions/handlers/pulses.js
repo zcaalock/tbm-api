@@ -19,7 +19,8 @@ exports.getPulses = (req, res) => {
           deadline: doc.data().deadline,          
           userId: doc.data().userId,
           status: doc.data().status,
-          archived: doc.data().archived
+          archived: doc.data().archived,
+          readed: doc.data().readed
         });
       })
       return res.json(pulse)
@@ -37,7 +38,8 @@ exports.postPulse = (req, res) => {
     privateId: req.body.privateId,
     archived: 'false',
     deadline: '',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    readed: []
   }
   db
     .collection('pulses')
@@ -53,7 +55,8 @@ exports.postPulse = (req, res) => {
           categoryId: newPulse.categoryId,
           privateId: newPulse.privateId,
           deadline: newPulse.deadline,
-          createdAt: newPulse.createdAt
+          createdAt: newPulse.createdAt,
+          readed: newPulse.readed
         },
         message: `Pulse ${doc.id} created successfuly`
       })
@@ -92,6 +95,7 @@ exports.patchPulse = (req, res) => {
       return pulseDocument.update(updateDate)
     })
     .then(() => {
+
       res.json({
         pulse: {
           id: pulseData.id,
@@ -103,7 +107,8 @@ exports.patchPulse = (req, res) => {
           editedAt: valueCheck(updateDocument, pulseData, "editedAt"),
           privateId: valueCheck(updateDocument, pulseData, "privateId"),
           deadline: valueCheck(updateDocument, pulseData, "deadline"),
-          archived: valueCheck(updateDocument, pulseData, "archived")
+          archived: valueCheck(updateDocument, pulseData, "archived"),
+          readed: valueCheck(updateDocument, pulseData, "readed")
         },
         message: `Pulse ${pulseData.id} edited successfuly`
       })
