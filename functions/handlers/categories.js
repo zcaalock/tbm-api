@@ -14,7 +14,8 @@ exports.getCategories = (req, res) => {
           boardId: doc.data().boardId,
           privateId: doc.data().privateId,
           createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt
+          editedAt: doc.data().editedAt,
+          archived: doc.data().archived
         });
       })
       return res.json(category)
@@ -31,6 +32,7 @@ exports.postCategory = (req, res) => {
   const newCategory = {
     title: req.body.title,
     boardId: req.body.boardId,
+    archived: 'false',
     privateId: '',
     createdAt: new Date().toISOString()
   }
@@ -41,6 +43,7 @@ exports.postCategory = (req, res) => {
       res.json({
         category: {
           title: newCategory.title,
+          archived: newCategory.archived,
           privateId: '',
           id: doc.id,
           boardId: newCategory.boardId,
