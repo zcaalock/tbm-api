@@ -58,16 +58,18 @@ exports.postCategory = (req, res) => {
       console.error(err)
     })
 }
-
 exports.patchCategory = (req, res) => {
-  const updateDocument = {
-    title: req.body.title,
+  const updateDocument = req.body
+  const updateDate = {
+
     editedAt: new Date().toISOString()
-  }
+  }  
+      
   const categoryDocument = db.doc(`/categories/${req.params.id}`)
   let categoryData
 
-  categoryDocument.get()
+  categoryDocument
+    .get()
     .then(doc => {
       if (doc.exists) {
         categoryData = doc.data()
@@ -79,6 +81,9 @@ exports.patchCategory = (req, res) => {
     })
     .then(() => {
       return categoryDocument.update(updateDocument)
+    })
+    .then(() => {
+      return categoryDocument.update(updateDate)
     })
     .then(() => {
       res.json({
