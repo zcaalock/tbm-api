@@ -39,7 +39,7 @@ exports.postPulse = (req, res) => {
     archived: 'false',
     deadline: '',
     createdAt: new Date().toISOString(),
-    readed: []
+    readed: [req.body.readed]
   }
   db
     .collection('pulses')
