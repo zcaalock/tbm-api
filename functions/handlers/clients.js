@@ -97,7 +97,7 @@ exports.patchClient = (req, res) => {
     .then(() => {
 
       res.json({
-        pulse: {
+        client: {
           id: clientData.id,
           title: valueCheck(updateDocument, clientData, "title"),
           mail: valueCheck(updateDocument, clientData, "mail"),
