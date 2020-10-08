@@ -58,7 +58,7 @@ exports.postPulse = (req, res) => {
           createdAt: newPulse.createdAt,
           readed: newPulse.readed
         },
-        message: `Pulse named ${newPulse.title} created successfuly`
+        message: `Pulse named "${newPulse.title}" created successfuly`
       })
     })
     .catch(err => {
