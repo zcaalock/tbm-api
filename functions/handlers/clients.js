@@ -64,7 +64,7 @@ exports.postClient = (req, res) => {
           createdAt: newClient.createdAt,
           readed: newClient.readed
         },
-        message: `Client ${doc.id} created successfuly`
+        message: `Client of id "${doc.id}" created successfuly`
       })
     })
     .catch(err => {
@@ -118,7 +118,7 @@ exports.patchClient = (req, res) => {
           archived: valueCheck(updateDocument, clientData, "archived"),
           readed: valueCheck(updateDocument, clientData, "readed")
         },
-        message: `Client ${clientData.id} edited successfuly`
+        message: `Client of id "${clientData.id}" edited successfuly`
       })
     })
     .catch(err => {

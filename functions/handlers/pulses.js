@@ -62,7 +62,7 @@ exports.postPulse = (req, res) => {
       })
     })
     .catch(err => {
-      res.status(500).json({ error: 'something went wrong' })
+      res.status(500).json({ error: 'Something went wrong' })
       console.error(err)
     })
 }
@@ -110,7 +110,7 @@ exports.patchPulse = (req, res) => {
           archived: valueCheck(updateDocument, pulseData, "archived"),
           readed: valueCheck(updateDocument, pulseData, "readed")
         },
-        message: `Pulse ${pulseData.id} edited successfuly`
+        message: `Pulse "${pulseData.title}" edited successfuly`
       })
     })
     .catch(err => {
