@@ -12,6 +12,7 @@ exports.getLead = (req, res) => {
         lead.push({
           id: doc.id,
           userId: doc.data().userId,
+          settings: doc.data().settings,
           title: doc.data().title
         });
       })
@@ -25,6 +26,7 @@ exports.postLead = (req, res) => {
     const newLead = {
       title: req.body.title,      
       userId: req.params.userId,
+      settings: req.params.settings,
       createdAt: new Date().toISOString()
     }
     db
@@ -36,9 +38,10 @@ exports.postLead = (req, res) => {
             id: doc.id,
             title: newLead.title,            
             userId: newLead.userId,
+            settings: newLead.settings,
             createdAt: newLead.createdAt
           },
-          message: `Lead ${doc.id} created successfuly`
+          message: `Lead named "${newLead.title}" created successfuly`
         })
       })
       .catch(err => {
@@ -79,11 +82,12 @@ exports.patchLead = (req, res) => {
         res.json({
           lead: {
             id: leadData.id,
-            title: valueCheck(updateDocument, leadData,"title"),            
+            title: valueCheck(updateDocument, leadData,"title"),   
+            settings: valueCheck(updateDocument, leadData,"settings"),         
             userId: leadData.userId,            
             editedAt: valueCheck(updateDocument, leadData,"editedAt")
           },
-          message: `Lead ${leadData.id} edited successfuly`
+          message: `Lead named "${leadData.title}" edited successfuly`
         })
       })
       .catch(err => {
