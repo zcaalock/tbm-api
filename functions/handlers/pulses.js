@@ -39,9 +39,9 @@ exports.getPulse = (req, res) => {
       }
     })
     .then(() => {
-      res.json(
+      res.json([
         pulse,
-        { message: 'Pulse fetched successfuly' })
+        { message: 'Pulse fetched successfuly' }])
     })
     .catch((err) => {
       console.error(err)
