@@ -28,6 +28,34 @@ exports.getPulses = (req, res) => {
     .catch(err => console.error(err))
 }
 
+exports.getPulse = (req, res) => {
+  const pusleBody = req.body  
+  const pulseDocument = db.doc(`/pulses/${req.params.id}`)
+  let pulseData
+
+  pulseDocument
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        pulseData = doc.data()
+        pulseData.id = doc.id
+        return pulseData
+      } else {
+        return res.status(404).json({ error: 'Pulse not found' })
+      }
+    })    
+    .then(() => {
+      res.json({
+        pulse: pulseData,
+        message: `Pulse "${pulseData.title}" fetched successfuly`
+      })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
+}
+
 exports.postPulse = (req, res) => {
 
   const newPulse = {
@@ -58,11 +86,11 @@ exports.postPulse = (req, res) => {
           createdAt: newPulse.createdAt,
           readed: newPulse.readed
         },
-        message: `Pulse ${doc.id} created successfuly`
+        message: `Pulse named "${newPulse.title}" created successfuly`
       })
     })
     .catch(err => {
-      res.status(500).json({ error: 'something went wrong' })
+      res.status(500).json({ error: 'Something went wrong' })
       console.error(err)
     })
 }
@@ -110,7 +138,7 @@ exports.patchPulse = (req, res) => {
           archived: valueCheck(updateDocument, pulseData, "archived"),
           readed: valueCheck(updateDocument, pulseData, "readed")
         },
-        message: `Pulse ${pulseData.id} edited successfuly`
+        message: `Pulse "${pulseData.title}" edited successfuly`
       })
     })
     .catch(err => {
@@ -137,3 +165,4 @@ exports.deletePulse = (req, res) => {
       return res.status(500).json({ error: err.code })
     })
 }
+

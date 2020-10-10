@@ -44,7 +44,7 @@ exports.postDetail = (req, res) => {
           pulseId: newDetail.pulseId,
           createdAt: newDetail.createdAt
         },
-        message: `Detail ${doc.id} created successfuly`
+        message: `Detail named "${newDetail.title}" created successfuly`
       })
     })
     .catch(err => {
@@ -91,7 +91,7 @@ exports.patchDetail = (req, res) => {
           createdAt: detailData.createdAt,
           editedAt: valueCheck(updateDocument, detailData, "editedAt")
         },
-        message: `Detail ${detailData.id} edited successfuly`
+        message: `Detail named "${detailData.title}" edited successfuly`
       })
     })
     .catch(err => {

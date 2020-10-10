@@ -44,7 +44,7 @@ exports.postBoard = (req, res) => {
           id: doc.id,
           createdAt: newBoard.createdAt
         },
-        message: `document ${doc.id} created successfuly`
+        message: `Board named "${newBoard.title}" created successfuly`
       })
     })
     .catch(err => {
@@ -129,7 +129,7 @@ exports.patchBoard = (req, res) => {
           createdAt: boardData.createdAt,
           editedAt: valueCheck(updateDocument, boardData, "editedAt"),
         },
-        message: `Pulse ${boardData.id} edited successfuly`
+        message: `Board named "${boardData.title}" edited successfuly`
       })
     })
     .catch(err => {

@@ -50,7 +50,7 @@ exports.postCategory = (req, res) => {
           boardId: newCategory.boardId,
           createdAt: newCategory.createdAt
         },
-        message: `document ${doc.id} created successfuly`
+        message: `Category named "${newCategory.title}" created successfuly`
       })
     })
     .catch(err => {
@@ -95,7 +95,7 @@ exports.patchCategory = (req, res) => {
           editedAt: valueCheck(updateDocument, categoryData, "editedAt"),
           archived: valueCheck(updateDocument, categoryData, "archived")          
         },
-        message: `Category ${categoryData.id} edited successfuly`
+        message: `Category named "${categoryData.title}" edited successfuly`
       })
     })
     .catch(err => {
