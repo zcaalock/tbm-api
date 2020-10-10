@@ -69,7 +69,7 @@ exports.postPulse = (req, res) => {
     deadline: '',
     createdAt: new Date().toISOString(),
     readed: [req.body.userId],
-    remonder: req.body.reminder
+    reminder: req.body.reminder
   }
   db
     .collection('pulses')
@@ -87,7 +87,7 @@ exports.postPulse = (req, res) => {
           deadline: newPulse.deadline,
           createdAt: newPulse.createdAt,
           readed: newPulse.readed,
-          remonder:newPulse.remonder
+          reminder:newPulse.reminder
         },
         message: `Pulse named "${newPulse.title}" created successfuly`
       })
@@ -140,7 +140,7 @@ exports.patchPulse = (req, res) => {
           deadline: valueCheck(updateDocument, pulseData, "deadline"),
           archived: valueCheck(updateDocument, pulseData, "archived"),
           readed: valueCheck(updateDocument, pulseData, "readed"),
-          remonder: valueCheck(updateDocument, pulseData, "remonder")
+          reminder: valueCheck(updateDocument, pulseData, "reminder")
         },
         message: `Pulse "${pulseData.title}" edited successfuly`
       })
