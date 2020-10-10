@@ -69,7 +69,7 @@ exports.postPulse = (req, res) => {
     deadline: '',
     createdAt: new Date().toISOString(),
     readed: [req.body.userId],
-    reminder: req.body.reminder
+    reminder: []
   }
   db
     .collection('pulses')
