@@ -29,23 +29,30 @@ exports.getPulses = (req, res) => {
 }
 
 exports.getPulse = (req, res) => {
-  const pulse = db.doc(`/pulses/${req.params.id}`)
-  pulse.get()
+  const pusleBody = req.body  
+  const pulseDocument = db.doc(`/pulses/${req.params.id}`)
+  let pulseData
+
+  pulseDocument
+    .get()
     .then(doc => {
-      if (!doc.exists) {
-        return res.status(404).json({ error: 'Pulse not found' })
+      if (doc.exists) {
+        pulseData = doc.data()
+        pulseData.id = doc.id
+        return pusleBody
       } else {
-        return pulse
+        return res.status(404).json({ error: 'Pulse not found' })
       }
-    })
+    })    
     .then(() => {
-      res.json([
-        pulse,
-        { message: 'Pulse fetched successfuly' }])
+      res.json({
+        pulse: pusleBody,
+        message: `Pulse "${pusleBody.title}" fetched successfuly`
+      })
     })
-    .catch((err) => {
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
       console.error(err)
-      return res.status(500).json({ error: err.code })
     })
 }
 
