@@ -28,6 +28,27 @@ exports.getPulses = (req, res) => {
     .catch(err => console.error(err))
 }
 
+exports.getPulse = (req, res) => {
+  const pulse = db.doc(`/pulses/${req.params.id}`)
+  pulse.get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: 'Pulse not found' })
+      } else {
+        return pulse
+      }
+    })
+    .then(() => {
+      res.json(
+        pulse,
+        { message: 'Pulse fetched successfuly' })
+    })
+    .catch((err) => {
+      console.error(err)
+      return res.status(500).json({ error: err.code })
+    })
+}
+
 exports.postPulse = (req, res) => {
 
   const newPulse = {
@@ -137,3 +158,4 @@ exports.deletePulse = (req, res) => {
       return res.status(500).json({ error: err.code })
     })
 }
+
