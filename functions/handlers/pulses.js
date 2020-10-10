@@ -39,15 +39,15 @@ exports.getPulse = (req, res) => {
       if (doc.exists) {
         pulseData = doc.data()
         pulseData.id = doc.id
-        return pusleBody
+        return pulseData
       } else {
         return res.status(404).json({ error: 'Pulse not found' })
       }
     })    
     .then(() => {
       res.json({
-        pulse: pusleBody,
-        message: `Pulse "${pusleBody.title}" fetched successfuly`
+        pulse: pulseData,
+        message: `Pulse "${pulseData.title}" fetched successfuly`
       })
     })
     .catch(err => {
