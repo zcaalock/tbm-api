@@ -110,7 +110,7 @@ exports.patchContact = (req, res) => {
           archived: valueCheck(updateDocument, contactData, "archived"),
           readed: valueCheck(updateDocument, contactData, "readed")
         },
-        message: `Contact of name "${contactData.name}" edited successfuly`
+        message: `Contact of name "${contact.name}" edited successfuly`
       })
     })
     .catch(err => {
