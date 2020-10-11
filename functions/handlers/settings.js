@@ -13,6 +13,7 @@ exports.getLead = (req, res) => {
           id: doc.id,
           userId: doc.data().userId,
           settings: doc.data().settings,
+          reminders: doc.data().reminders,
           title: doc.data().title
         });
       })
@@ -27,6 +28,7 @@ exports.postLead = (req, res) => {
       title: req.body.title,      
       userId: req.params.userId,
       settings: req.params.settings,
+      reminders: req.params.reminders,
       createdAt: new Date().toISOString()
     }
     db
@@ -39,6 +41,7 @@ exports.postLead = (req, res) => {
             title: newLead.title,            
             userId: newLead.userId,
             settings: newLead.settings,
+            reminders: newLead.reminders,
             createdAt: newLead.createdAt
           },
           message: `Lead named "${newLead.title}" created successfuly`
@@ -83,7 +86,8 @@ exports.patchLead = (req, res) => {
           lead: {
             id: leadData.id,
             title: valueCheck(updateDocument, leadData,"title"),   
-            settings: valueCheck(updateDocument, leadData,"settings"),         
+            settings: valueCheck(updateDocument, leadData,"settings"),
+            reminders: valueCheck(updateDocument, leadData,"reminders"),         
             userId: leadData.userId,            
             editedAt: valueCheck(updateDocument, leadData,"editedAt")
           },

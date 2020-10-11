@@ -20,7 +20,8 @@ exports.getPulses = (req, res) => {
           userId: doc.data().userId,
           status: doc.data().status,
           archived: doc.data().archived,
-          readed: doc.data().readed
+          readed: doc.data().readed,
+          reminder: doc.data().reminder
         });
       })
       return res.json(pulse)
@@ -67,7 +68,7 @@ exports.postPulse = (req, res) => {
     archived: 'false',
     deadline: '',
     createdAt: new Date().toISOString(),
-    readed: [req.body.userId]
+    readed: [req.body.userId]    
   }
   db
     .collection('pulses')
