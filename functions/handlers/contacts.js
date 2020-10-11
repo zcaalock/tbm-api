@@ -46,7 +46,7 @@ exports.postContact = (req, res) => {
     .add(newContact)
     .then(doc => {
       res.json({
-        client: {
+        contact: {
           id: doc.id,
           title: newContact.title,
           mail: newContact.mail,
@@ -97,7 +97,7 @@ exports.patchContact = (req, res) => {
     .then(() => {
 
       res.json({
-        client: {
+        contact: {
           id: contactData.id,
           title: valueCheck(updateDocument, contactData, "title"),
           mail: valueCheck(updateDocument, contactData, "mail"),
