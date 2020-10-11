@@ -44,7 +44,7 @@ app.patch('/client/:id', patchClient)
 
 //contacts routes
 app.get('/contacts', getContacts)
-app.post('/contact', postClient)
+app.post('/contact', postContact)
 app.delete('/contact/:id', deleteContact)
 app.patch('/contact/:id', patchContact)
 
