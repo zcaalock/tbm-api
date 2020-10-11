@@ -58,7 +58,7 @@ exports.postContact = (req, res) => {
           createdAt: newContact.createdAt,
           readed: newContact.readed
         },
-        message: `Contact of name "${doc.title}" created successfuly`
+        message: `Contact of name "${newContact.title}" created successfuly`
       })
     })
     .catch(err => {
