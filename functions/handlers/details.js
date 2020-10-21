@@ -14,9 +14,11 @@ exports.getDetails = (req, res) => {
           title: doc.data().title,
           check: doc.data().check,
           pulseId: doc.data().pulseId,
-          //userHandle: doc.data().userHandle,
+          userId: doc.data().userId,
+          editedId: doc.data().editedId,
           createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt
+          editedAt: doc.data().editedAt,
+          flag: doc.data().flag
         });
       })
       return res.json(detail)
@@ -24,7 +26,7 @@ exports.getDetails = (req, res) => {
     .catch(err => console.error(err))
 }
 
-exports.getDetail= (req, res) => {   
+exports.getDetail = (req, res) => {
   const detailDocument = db.doc(`/details/${req.params.id}`)
   let detailData
 
@@ -38,7 +40,7 @@ exports.getDetail= (req, res) => {
       } else {
         return res.status(404).json({ error: 'Detail not found' })
       }
-    })    
+    })
     .then(() => {
       res.json({
         detail: detailData,
@@ -56,7 +58,9 @@ exports.postDetail = (req, res) => {
   const newDetail = {
     title: req.body.title,
     check: 'false',
+    flag: '',
     pulseId: req.body.pulseId,
+    userId: req.body.userId,
     createdAt: new Date().toISOString()
   }
   db
@@ -69,7 +73,9 @@ exports.postDetail = (req, res) => {
           title: newDetail.title,
           check: newDetail.check,
           pulseId: newDetail.pulseId,
-          createdAt: newDetail.createdAt
+          createdAt: newDetail.createdAt,
+          userId: newDetail.userId,
+          flag: newDetail.flag
         },
         message: `Detail named "${newDetail.title}" created successfuly`
       })
@@ -116,7 +122,9 @@ exports.patchDetail = (req, res) => {
           check: valueCheck(updateDocument, detailData, "check"),
           pulseId: detailData.pulseId,
           createdAt: detailData.createdAt,
-          editedAt: valueCheck(updateDocument, detailData, "editedAt")
+          editedAt: valueCheck(updateDocument, detailData, "editedAt"),
+          editedId: valueCheck(updateDocument, detailData, "editedId"),
+          flag: valueCheck(updateDocument, detailData, "flag")
         },
         message: `Detail named "${detailData.title}" edited successfuly`
       })
