@@ -8,9 +8,10 @@ app.use(cors())
 
 const { getBoards, postBoard, deleteBoard, patchBoard } = require('./handlers/boards')
 const { getCategories, getCategory, postCategory, patchCategory, deleteCategory } = require('./handlers/categories')
-const { getDetails, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
+const { getDetails, getDetail, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, getPulse, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
 const { getClients, postClient, deleteClient, patchClient } = require('./handlers/clients')
+const { getContacts, postContact, deleteContact, patchContact } = require('./handlers/contacts')
 const { getLead, deleteLead, postLead, patchLead, getStatus } = require('./handlers/settings')
 const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
 const { getNotes, postNote, patchNote, deleteNote } = require('./handlers/notepad')
@@ -41,8 +42,15 @@ app.post('/client', postClient)
 app.delete('/client/:id', deleteClient)
 app.patch('/client/:id', patchClient)
 
+//contacts routes
+app.get('/contacts', getContacts)
+app.post('/contact', postContact)
+app.delete('/contact/:id', deleteContact)
+app.patch('/contact/:id', patchContact)
+
 //details routes
 app.get('/details', getDetails)
+app.get('/detail/:id', getDetail)
 app.post('/detail', postDetail)
 app.delete('/detail/:id', deleteDetail)
 app.patch('/detail/:id', patchDetail)

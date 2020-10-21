@@ -24,6 +24,33 @@ exports.getDetails = (req, res) => {
     .catch(err => console.error(err))
 }
 
+exports.getDetail= (req, res) => {   
+  const detailDocument = db.doc(`/details/${req.params.id}`)
+  let detailData
+
+  detailDocument
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        detailData = doc.data()
+        detailData.id = doc.id
+        return detailData
+      } else {
+        return res.status(404).json({ error: 'Detail not found' })
+      }
+    })    
+    .then(() => {
+      res.json({
+        detail: detailData,
+        message: `Detail "${detailData.title}" fetched successfuly`
+      })
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'something went wrong' })
+      console.error(err)
+    })
+}
+
 exports.postDetail = (req, res) => {
 
   const newDetail = {
