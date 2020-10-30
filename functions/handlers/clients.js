@@ -9,21 +9,14 @@ exports.getClients = (req, res) => {
     .then(data => {
       let client = [];
       data.forEach((doc) => {
-        client.push({
-          id: doc.id,
-          title: doc.data().title,
-          mail: doc.data().mail,
-          phone: doc.data().phone,
-          project: doc.data().project,
-          price: doc.data().price,
-          unit: doc.data().unit,
-          createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt,         
-          userId: doc.data().userId,
-          status: doc.data().status,
-          archived: doc.data().archived,
-          readed: doc.data().readed
-        });
+        const document = {
+          id: doc.id
+        };
+        for (const [index, data] of Object.entries(doc.data())) {
+          document[index] = data
+        }
+
+        client.push(document);
       })
       return res.json(client)
     })
@@ -31,39 +24,22 @@ exports.getClients = (req, res) => {
 }
 
 exports.postClient = (req, res) => {
-
-  const newClient = {
-    title: req.body.title,
-    mail: req.body.mail,
-    phone: req.body.phone,
-    project: req.body.project,
-    price: req.body.price,
-    unit: req.body.unit,
-    userId: req.body.userId,
-    status: req.body.status,    
-    archived: 'false',    
+  const document = req.body
+  const statc = {
+    archived: 'false',
     createdAt: new Date().toISOString(),
     readed: [req.body.userId]
   }
+
+  let newClient = { ...document, ...statc }
   db
     .collection('clients')
     .add(newClient)
     .then(doc => {
+      newClient.id = doc.id
+      let client = newClient
       res.json({
-        client: {
-          id: doc.id,
-          title: newClient.title,
-          mail: newClient.mail,
-          phone: newClient.phone,
-          project: newClient.project,
-          price: newClient.price,
-          unit: newClient.unit,
-          userId: newClient.userId,
-          status: newClient.status,
-          archived: newClient.archived,          
-          createdAt: newClient.createdAt,
-          readed: newClient.readed
-        },
+        client,
         message: `Client of id "${doc.id}" created successfuly`
       })
     })
@@ -82,6 +58,7 @@ exports.patchClient = (req, res) => {
 
   const clientDocument = db.doc(`/clients/${req.params.id}`)
   let clientData
+  let client
 
   clientDocument
     .get()
@@ -101,25 +78,25 @@ exports.patchClient = (req, res) => {
       return clientDocument.update(updateDate)
     })
     .then(() => {
+      let client = {};
+      //const docId = {id: req.params.id}
+      db.doc(`/clients/${req.params.id}`)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            client = doc.data()
+            client.id = doc.id
 
-      res.json({
-        client: {
-          id: clientData.id,
-          title: valueCheck(updateDocument, clientData, "title"),
-          mail: valueCheck(updateDocument, clientData, "mail"),
-          phone: valueCheck(updateDocument, clientData, "phone"),
-          project: valueCheck(updateDocument, clientData, "project"),
-          price: valueCheck(updateDocument, clientData, "price"),
-          unit: valueCheck(updateDocument, clientData, "unit"),
-          userId: valueCheck(updateDocument, clientData, "userId"),
-          status: valueCheck(updateDocument, clientData, "status"),          
-          createdAt: clientData.createdAt,
-          editedAt: valueCheck(updateDocument, clientData, "editedAt"),          
-          archived: valueCheck(updateDocument, clientData, "archived"),
-          readed: valueCheck(updateDocument, clientData, "readed")
-        },
-        message: `Client of id "${clientData.id}" edited successfuly`
-      })
+            return res.json({
+              client,
+              message: `Client of id "${doc.id}" edited successfuly`
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        })
     })
     .catch(err => {
       res.status(500).json({ error: 'something went wrong' })
