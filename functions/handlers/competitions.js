@@ -1,12 +1,12 @@
 const { db } = require('../util/admin')
 
-exports.getClients = (req, res) => {
+exports.getCompetitions = (req, res) => {
   db
-    .collection('clients')
+    .collection('competitions')
     .orderBy('createdAt')
     .get()
     .then(data => {
-      let client = [];
+      let competition = [];
       data.forEach((doc) => {
         const document = {
           id: doc.id
@@ -15,14 +15,14 @@ exports.getClients = (req, res) => {
           document[index] = data
         }
 
-        client.push(document);
+        competition.push(document);
       })
-      return res.json(client)
+      return res.json(competition)
     })
     .catch(err => console.error(err))
 }
 
-exports.postClient = (req, res) => {
+exports.postCompetition = (req, res) => {
   const document = req.body
   const statc = {
     archived: 'false',
@@ -30,16 +30,16 @@ exports.postClient = (req, res) => {
     readed: [req.body.userId]
   }
 
-  let newClient = { ...document, ...statc }
+  let newCompetition = { ...document, ...statc }
   db
-    .collection('clients')
-    .add(newClient)
+    .collection('competitions')
+    .add(newCompetition)
     .then(doc => {
-      newClient.id = doc.id
-      let client = newClient
+      newCompetition.id = doc.id
+      let competition = newCompetition
       res.json({
-        client,
-        message: `Client of id "${doc.id}" created successfuly`
+        competition,
+        message: `Competition of id "${doc.id}" created successfuly`
       })
     })
     .catch(err => {
@@ -48,46 +48,46 @@ exports.postClient = (req, res) => {
     })
 }
 
-exports.patchClient = (req, res) => {
+exports.patchCompetition = (req, res) => {
   const updateDocument = req.body
   const updateDate = {
 
     editedAt: new Date().toISOString()
   }
 
-  const clientDocument = db.doc(`/clients/${req.params.id}`)
-  let clientData 
+  const competitionDocument = db.doc(`/competitions/${req.params.id}`)
+  let competitionData  
 
-  clientDocument
+  competitionDocument
     .get()
     .then(doc => {
       if (doc.exists) {
-        clientData = doc.data()
-        clientData.id = doc.id
+        competitionData = doc.data()
+        competitionData.id = doc.id
         return updateDocument
       } else {
-        return res.status(404).json({ error: 'Client not found' })
+        return res.status(404).json({ error: 'Competition not found' })
       }
     })
     .then(() => {
-      return clientDocument.update(updateDocument)
+      return competitionDocument.update(updateDocument)
     })
     .then(() => {
-      return clientDocument.update(updateDate)
+      return competitionDocument.update(updateDate)
     })
     .then(() => {
-      let client = {};
+      let competition = {};
       //const docId = {id: req.params.id}
-      db.doc(`/clients/${req.params.id}`)
+      db.doc(`/competitions/${req.params.id}`)
         .get()
         .then((doc) => {
           if (doc.exists) {
-            client = doc.data()
-            client.id = doc.id
+            competition = doc.data()
+            competition.id = doc.id
 
             return res.json({
-              client,
-              message: `Client of id "${doc.id}" edited successfuly`
+              competition,
+              message: `Competition of id "${doc.id}" edited successfuly`
             });
           }
         })
@@ -102,18 +102,18 @@ exports.patchClient = (req, res) => {
     })
 }
 
-exports.deleteClient = (req, res) => {
-  const document = db.doc(`/clients/${req.params.id}`)
+exports.deleteCompetition = (req, res) => {
+  const document = db.doc(`/competitions/${req.params.id}`)
   document.get()
     .then(doc => {
       if (!doc.exists) {
-        return res.status(404).json({ error: 'Client not found' })
+        return res.status(404).json({ error: 'Competition not found' })
       } else {
         return document.delete()
       }
     })
     .then(() => {
-      res.json({ message: 'Client deleted successfuly' })
+      res.json({ message: 'Competition deleted successfuly' })
     })
     .catch((err) => {
       console.error(err)
