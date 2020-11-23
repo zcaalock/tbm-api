@@ -11,6 +11,7 @@ const { getCategories, getCategory, postCategory, patchCategory, deleteCategory 
 const { getDetails, getDetail, postDetail, patchDetail, deleteDetail } = require('./handlers/details')
 const { getPulses, getPulse, postPulse, deletePulse, patchPulse } = require('./handlers/pulses')
 const { getClients, postClient, deleteClient, patchClient } = require('./handlers/clients')
+const { getCompetitions, postCompetition, deleteCompetition, patchCompetition } = require('./handlers/competitions')
 const { getContacts, postContact, deleteContact, patchContact } = require('./handlers/contacts')
 const { getLead, deleteLead, postLead, patchLead, getStatus } = require('./handlers/settings')
 const { signup, login, getUsers, uploadImage, addUserDetails, getAuthenticatedUser } = require('./handlers/users')
@@ -42,6 +43,12 @@ app.post('/client', postClient)
 app.delete('/client/:id', deleteClient)
 app.patch('/client/:id', patchClient)
 
+//competitions routes
+app.get('/competitions', getCompetitions)
+app.post('/competition', postCompetition)
+app.delete('/competition/:id', deleteCompetition)
+app.patch('/competition/:id', patchCompetition)
+
 //contacts routes
 app.get('/contacts', getContacts)
 app.post('/contact', postContact)
@@ -67,10 +74,7 @@ app.post('/lead/:userId', postLead)
 app.patch('/lead/:id', patchLead)
 app.delete('/lead/:id', deleteLead)
 
-
 app.get('/status', getStatus)
-
-
 
 //users routes
 app.post('/signup', signup)
