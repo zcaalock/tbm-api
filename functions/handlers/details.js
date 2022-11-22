@@ -18,7 +18,8 @@ exports.getDetails = (req, res) => {
           editedId: doc.data().editedId,
           createdAt: doc.data().createdAt,
           editedAt: doc.data().editedAt,
-          flag: doc.data().flag
+          flag: doc.data().flag,
+          duration: doc.data().duration
         });
       })
       return res.json(detail)
@@ -61,7 +62,8 @@ exports.postDetail = (req, res) => {
     flag: '',
     pulseId: req.body.pulseId,
     userId: req.body.userId,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    duration: 0
   }
   db
     .collection('details')
@@ -75,7 +77,8 @@ exports.postDetail = (req, res) => {
           pulseId: newDetail.pulseId,
           createdAt: newDetail.createdAt,
           userId: newDetail.userId,
-          flag: newDetail.flag
+          flag: newDetail.flag,
+          duration: newDetail.duration
         },
         message: `Detail named "${newDetail.title}" created successfuly`
       })
@@ -124,7 +127,8 @@ exports.patchDetail = (req, res) => {
           createdAt: detailData.createdAt,
           editedAt: valueCheck(updateDocument, detailData, "editedAt"),
           editedId: valueCheck(updateDocument, detailData, "editedId"),
-          flag: valueCheck(updateDocument, detailData, "flag")
+          flag: valueCheck(updateDocument, detailData, "flag"),
+          duration: valueCheck(updateDocument, detailData, "duration")
         },
         message: `Detail named "${detailData.title}" edited successfuly`
       })
