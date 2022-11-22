@@ -14,7 +14,8 @@ exports.getBoards = (req, res) => {
           title: doc.data().title,
           privateId: doc.data().privateId,
           createdAt: doc.data().createdAt,
-          editedAt: doc.data().editedAt
+          editedAt: doc.data().editedAt,
+          archived: doc.data().archived
         });
       })
       return res.json(boards)
@@ -42,7 +43,8 @@ exports.postBoard = (req, res) => {
           title: newBoard.title,
           privateId: newBoard.privateId,
           id: doc.id,
-          createdAt: newBoard.createdAt
+          createdAt: newBoard.createdAt,
+          archived: newBoard.archived
         },
         message: `Board named "${newBoard.title}" created successfuly`
       })
@@ -128,6 +130,7 @@ exports.patchBoard = (req, res) => {
           privateId: valueCheck(updateDocument, boardData, "privateId"),          
           createdAt: boardData.createdAt,
           editedAt: valueCheck(updateDocument, boardData, "editedAt"),
+          archived: valueCheck(updateDocument, boardData, "archived")
         },
         message: `Board named "${boardData.title}" edited successfuly`
       })
