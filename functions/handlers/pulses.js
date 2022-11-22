@@ -21,7 +21,8 @@ exports.getPulses = (req, res) => {
           status: doc.data().status,
           archived: doc.data().archived,
           readed: doc.data().readed,
-          reminder: doc.data().reminder
+          reminder: doc.data().reminder,
+          duration: doc.data().duration
         });
       })
       return res.json(pulse)
@@ -68,7 +69,8 @@ exports.postPulse = (req, res) => {
     archived: 'false',
     deadline: '',
     createdAt: new Date().toISOString(),
-    readed: [req.body.userId]    
+    readed: [req.body.userId],
+    duration: 0    
   }
   db
     .collection('pulses')
@@ -85,7 +87,8 @@ exports.postPulse = (req, res) => {
           privateId: newPulse.privateId,
           deadline: newPulse.deadline,
           createdAt: newPulse.createdAt,
-          readed: newPulse.readed
+          readed: newPulse.readed,
+          duration: newPulse.duration
         },
         message: `Pulse named "${newPulse.title}" created successfuly`
       })
@@ -137,7 +140,8 @@ exports.patchPulse = (req, res) => {
           privateId: valueCheck(updateDocument, pulseData, "privateId"),
           deadline: valueCheck(updateDocument, pulseData, "deadline"),
           archived: valueCheck(updateDocument, pulseData, "archived"),
-          readed: valueCheck(updateDocument, pulseData, "readed")
+          readed: valueCheck(updateDocument, pulseData, "readed"),
+          duration: valueCheck(updateDocument, pulseData, "duration")
         },
         message: `Pulse "${pulseData.title}" edited successfuly`
       })

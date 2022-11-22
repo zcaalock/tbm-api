@@ -32,7 +32,8 @@ exports.postBoard = (req, res) => {
   const newBoard = {
     title: req.body.title,
     privateId: req.body.privateId,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    archived: 'false'
   }
   db
     .collection('boards')
