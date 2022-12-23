@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "firebase": "^8.10.1",
-    "firebase-admin": "^11.3.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.24.1",
     "xhr2": "^0.2.1"
   },
